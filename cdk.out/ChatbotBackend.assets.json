@@ -1,0 +1,32 @@
+{
+  "version": "35.0.0",
+  "files": {
+    "22f366ae66b18074185fe58d734996ee480e68d2f3e752d9f28ee638dfda70be": {
+      "source": {
+        "path": "asset.22f366ae66b18074185fe58d734996ee480e68d2f3e752d9f28ee638dfda70be",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "22f366ae66b18074185fe58d734996ee480e68d2f3e752d9f28ee638dfda70be.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "ffb10c95e61b54b5beb615343ccc2ee35101ca355c4fe3eee7290715def47038": {
+      "source": {
+        "path": "ChatbotBackend.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "ffb10c95e61b54b5beb615343ccc2ee35101ca355c4fe3eee7290715def47038.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -1,0 +1,611 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "ChatbotBackend": {
+        "id": "ChatbotBackend",
+        "path": "ChatbotBackend",
+        "children": {
+          "ChatbotApi": {
+            "id": "ChatbotApi",
+            "path": "ChatbotBackend/ChatbotApi",
+            "children": {
+              "ChatbotHandler": {
+                "id": "ChatbotHandler",
+                "path": "ChatbotBackend/ChatbotApi/ChatbotHandler",
+                "children": {
+                  "ServiceRole": {
+                    "id": "ServiceRole",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/ServiceRole",
+                    "children": {
+                      "ImportServiceRole": {
+                        "id": "ImportServiceRole",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/ServiceRole/ImportServiceRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.110.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/ServiceRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "lambda.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.110.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/ServiceRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/ServiceRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "bedrock:InvokeModel",
+                                        "bedrock:ListFoundationModels"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "ChatbotApiChatbotHandlerServiceRoleDefaultPolicyB7D4EB5F",
+                                "roles": [
+                                  {
+                                    "Ref": "ChatbotApiChatbotHandlerServiceRole6FDBF377"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.110.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.110.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "Code": {
+                    "id": "Code",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.AssetStaging",
+                          "version": "2.110.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                          "version": "2.110.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotHandler/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                      "aws:cdk:cloudformation:props": {
+                        "code": {
+                          "s3Bucket": {
+                            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                          },
+                          "s3Key": "22f366ae66b18074185fe58d734996ee480e68d2f3e752d9f28ee638dfda70be.zip"
+                        },
+                        "environment": {
+                          "variables": {
+                            "CONTEXT_PROMPT": "Answer like I am 5 years old",
+                            "BEDROCK_MODEL_ID": "anthropic.claude-3-5-haiku-20241022-v1:0"
+                          }
+                        },
+                        "handler": "chatbot.handler",
+                        "role": {
+                          "Fn::GetAtt": [
+                            "ChatbotApiChatbotHandlerServiceRole6FDBF377",
+                            "Arn"
+                          ]
+                        },
+                        "runtime": "python3.9"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                      "version": "2.110.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-lambda-python-alpha.PythonFunction",
+                  "version": "2.110.0-alpha.0"
+                }
+              },
+              "ChatbotAPI": {
+                "id": "ChatbotAPI",
+                "path": "ChatbotBackend/ChatbotApi/ChatbotAPI",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                      "aws:cdk:cloudformation:props": {
+                        "name": "ChatbotAPI"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "CloudWatchRole": {
+                    "id": "CloudWatchRole",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/CloudWatchRole",
+                    "children": {
+                      "ImportCloudWatchRole": {
+                        "id": "ImportCloudWatchRole",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/CloudWatchRole/ImportCloudWatchRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.110.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/CloudWatchRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "apigateway.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "managedPolicyArns": [
+                              {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                                  ]
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.110.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "Account": {
+                    "id": "Account",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Account",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+                      "aws:cdk:cloudformation:props": {
+                        "cloudWatchRoleArn": {
+                          "Fn::GetAtt": [
+                            "ChatbotApiChatbotAPICloudWatchRole68EDD3E5",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnAccount",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "Deployment": {
+                    "id": "Deployment",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Deployment",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Deployment/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                          "aws:cdk:cloudformation:props": {
+                            "description": "Automatically created by the RestApi construct",
+                            "restApiId": {
+                              "Ref": "ChatbotApiChatbotAPI8CA7BBB0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                          "version": "2.110.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "DeploymentStage.prod": {
+                    "id": "DeploymentStage.prod",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/DeploymentStage.prod",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/DeploymentStage.prod/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                          "aws:cdk:cloudformation:props": {
+                            "deploymentId": {
+                              "Ref": "ChatbotApiChatbotAPIDeployment9B38922158087c47da9cb1a06d3387a80390ab58"
+                            },
+                            "restApiId": {
+                              "Ref": "ChatbotApiChatbotAPI8CA7BBB0"
+                            },
+                            "stageName": "prod"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                          "version": "2.110.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "Endpoint": {
+                    "id": "Endpoint",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Endpoint",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnOutput",
+                      "version": "2.110.0"
+                    }
+                  },
+                  "Default": {
+                    "id": "Default",
+                    "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default",
+                    "children": {
+                      "chat": {
+                        "id": "chat",
+                        "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default/chat",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default/chat/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                              "aws:cdk:cloudformation:props": {
+                                "parentId": {
+                                  "Fn::GetAtt": [
+                                    "ChatbotApiChatbotAPI8CA7BBB0",
+                                    "RootResourceId"
+                                  ]
+                                },
+                                "pathPart": "chat",
+                                "restApiId": {
+                                  "Ref": "ChatbotApiChatbotAPI8CA7BBB0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                              "version": "2.110.0"
+                            }
+                          },
+                          "POST": {
+                            "id": "POST",
+                            "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default/chat/POST",
+                            "children": {
+                              "ApiPermission.ChatbotBackendChatbotApiChatbotAPI35156B46.POST..chat": {
+                                "id": "ApiPermission.ChatbotBackendChatbotApiChatbotAPI35156B46.POST..chat",
+                                "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default/chat/POST/ApiPermission.ChatbotBackendChatbotApiChatbotAPI35156B46.POST..chat",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "ChatbotApiChatbotHandler38BEFADA",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "ChatbotApiChatbotAPI8CA7BBB0"
+                                          },
+                                          "/",
+                                          {
+                                            "Ref": "ChatbotApiChatbotAPIDeploymentStageprodA452D0A7"
+                                          },
+                                          "/POST/chat"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.110.0"
+                                }
+                              },
+                              "ApiPermission.Test.ChatbotBackendChatbotApiChatbotAPI35156B46.POST..chat": {
+                                "id": "ApiPermission.Test.ChatbotBackendChatbotApiChatbotAPI35156B46.POST..chat",
+                                "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default/chat/POST/ApiPermission.Test.ChatbotBackendChatbotApiChatbotAPI35156B46.POST..chat",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "ChatbotApiChatbotHandler38BEFADA",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "ChatbotApiChatbotAPI8CA7BBB0"
+                                          },
+                                          "/test-invoke-stage/POST/chat"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.110.0"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "ChatbotBackend/ChatbotApi/ChatbotAPI/Default/chat/POST/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                                  "aws:cdk:cloudformation:props": {
+                                    "authorizationType": "NONE",
+                                    "httpMethod": "POST",
+                                    "integration": {
+                                      "type": "AWS_PROXY",
+                                      "uri": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:",
+                                            {
+                                              "Ref": "AWS::Partition"
+                                            },
+                                            ":apigateway:",
+                                            {
+                                              "Ref": "AWS::Region"
+                                            },
+                                            ":lambda:path/2015-03-31/functions/",
+                                            {
+                                              "Fn::GetAtt": [
+                                                "ChatbotApiChatbotHandler38BEFADA",
+                                                "Arn"
+                                              ]
+                                            },
+                                            "/invocations"
+                                          ]
+                                        ]
+                                      },
+                                      "integrationHttpMethod": "POST"
+                                    },
+                                    "resourceId": {
+                                      "Ref": "ChatbotApiChatbotAPIchat147B925F"
+                                    },
+                                    "restApiId": {
+                                      "Ref": "ChatbotApiChatbotAPI8CA7BBB0"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                                  "version": "2.110.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                              "version": "2.110.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                          "version": "2.110.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                      "version": "2.110.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.LambdaRestApi",
+                  "version": "2.110.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "ChatbotBackend/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "ChatbotBackend/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.110.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "ChatbotBackend/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.110.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "ChatbotBackend/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.110.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "ChatbotBackend/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.110.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.110.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.110.0"
+    }
+  }
+}
