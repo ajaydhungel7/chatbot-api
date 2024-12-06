@@ -30,7 +30,7 @@ After deployment, you will receive an API endpoint. Use this endpoint to send PO
 Example request:
 
 ```bash
-curl -X POST https://your-api-endpoint/chat -d '{"prompt": "Hello, how are you?"}'
+curl -X POST   https://2api-gateway-endpoint/prod/chat   -H 'Content-Typeprod/: application/json'   -d '{"input": "Hello chatbot"}'
 ```
 
 ## Important Notes
